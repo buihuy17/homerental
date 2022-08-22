@@ -9,6 +9,7 @@ import {
 import {checkToken} from '../../../middlewares/token.middleware';
 import {checkUser} from "../../../middlewares/user.middleware";
 import {checkAdmin} from "../../../middlewares/admin.middleware";
+import "express-async-errors";
 
 export const contactRoute = express.Router();
 

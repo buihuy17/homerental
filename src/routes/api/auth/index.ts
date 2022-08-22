@@ -1,6 +1,7 @@
 import express from 'express';
-import {verify, signup, login} from "../../../app/controllers/user.controller";
+import {verify, signup, login} from "../../../app/controllers/auth.controller";
 import {checkToken} from '../../../middlewares/token.middleware';
+import "express-async-errors";
 
 export const authRoute = express.Router();
 

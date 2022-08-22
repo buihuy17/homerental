@@ -1,7 +1,7 @@
 import passport from 'passport';
 import {Strategy, ExtractJwt} from "passport-jwt";
 import 'dotenv/config';
-import {AccountModel} from "../app/models/user.model";
+import {AccountModel} from "../app/models/auth.model";
 import {Request, Response, NextFunction} from "express";
 
 export function passportMiddleware(req: Request, res: Response, next: NextFunction) {

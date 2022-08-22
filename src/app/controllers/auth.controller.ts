@@ -1,5 +1,5 @@
-import {createUser} from "../services/user.service";
-import {AccountModel} from "../models/user.model";
+import {createUser} from "../services/auth.service";
+import {AuthModel} from "../models/auth.model";
 import 'dotenv/config';
 import bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken';
@@ -14,23 +14,11 @@ export async function verify(req: Request, res: Response) {
 export async function signup(req: Request, res: Response, next: NextFunction) {
   const {username, password, email} = req.body;
   // Check email exists or not
-  const emailExist = await AccountModel.findOne({email});
+  const emailExist = await AuthModel.findOne({email});
   if (emailExist) return res.status(400).send('Email already exists');
   // Check username exists or not
-  const usernameExist = await AccountModel.findOne({username});
+  const usernameExist = await AuthModel.findOne({username});
   if (usernameExist) return res.status(400).send('Username already exists');
-  // // sign and create token
-  // const token = jwt.sign({
-  //     iss: 'Bui Huy',
-  //     sub: username,
-  //     iat: new Date().getTime(),
-  //     // exp: new Date().setDate(new Date().getDate() + 3),
-  //     //exp: ma token het han trong vong 3 ngay
-  //   }, process.env.JWT_SECRET as string, {
-  //     expiresIn: '30d',
-  //     algorithm: 'HS256',
-  //   }
-  // )
 
   const userinfo = await createUser(username, email, password);
   return res.status(200).json({
@@ -49,7 +37,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
   const {username, password, email} = req.body;
 
   // Check email
-  const account: any = await AccountModel.findOne({username}).select('+password');
+  const account: any = await AuthModel.findOne({username}).select('+password');
   if (!account) return res.status(400).send('Invalid username');
   // check password
   const passwordLogin = await bcrypt.compare(password, account?.password);

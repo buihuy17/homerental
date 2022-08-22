@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import {connect} from './config/db';
 import {mainRoute} from './routes';
+import {handleError} from "./middlewares/error.middleware";
 
 const app = express();
 const port = process.env.PORT || 2222;
@@ -21,9 +22,11 @@ connect().then(r => {
 app.use(express.json());
 
 app.use(cors());
-
 //main route
 app.use(mainRoute);
+
+//global handle error
+app.use(handleError);
 
 app.listen(port, () => {
   console.log(`App listening  http://localhost:${port}`);

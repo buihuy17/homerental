@@ -15,3 +15,14 @@ interface Account {
     status?: string,
     telegramId: string,
 }
+
+interface Role {
+    id?: any,
+    name: string,
+    slug: string,
+    level: number,
+    permissions: GlobalPermissions[],
+    default: boolean,
+    createdAt: Date,
+    updatedAt: Date
+}

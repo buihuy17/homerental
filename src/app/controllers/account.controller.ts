@@ -1,4 +1,4 @@
-import {AccountModel} from "../models/user.model";
+import {AuthModel} from "../models/auth.model";
 import {Request, Response, NextFunction} from "express";
 import bcrypt from "bcryptjs";
 import passport from 'passport';
@@ -6,7 +6,7 @@ import {Strategy, ExtractJwt} from "passport-jwt";
 import 'dotenv/config';
 
 export async function getAccounts(req: Request, res: Response) {
-  const accounts: object = await AccountModel.find({});
+  const accounts: object = await AuthModel.find({});
   res.json({
     message: 'get all accounts successfully',
     data: accounts,
@@ -15,7 +15,7 @@ export async function getAccounts(req: Request, res: Response) {
 
 //Get account by admin
 export async function getAccountByAdmin(req: Request, res: Response) {
-  const account = await AccountModel.findOne({username: req.params.username});
+  const account = await AuthModel.findOne({username: req.params.username});
   if (!account) return res.json({message: 'account not found'});
   res.json({
     message: 'get account user successfully',
@@ -25,6 +25,7 @@ export async function getAccountByAdmin(req: Request, res: Response) {
 
 //get my account
 export async function getAccount(req: Request, res: Response) {
+  // throw new Error('123');
   res.json({
     message: 'get my account successfully',
     data: req.user,
@@ -33,7 +34,7 @@ export async function getAccount(req: Request, res: Response) {
 
 //Update
 export async function update(req: Request, res: Response) {
-  let account = await AccountModel.findOne({username: req.params.username}).select(
+  let account = await AuthModel.findOne({username: req.params.username}).select(
     '+password'
   );
   if (!account) return res.json({message: 'Error update'});
@@ -50,9 +51,9 @@ export async function update(req: Request, res: Response) {
   }
 
   //update
-  account = await AccountModel.findOne({username: req.params.username});
+  account = await AuthModel.findOne({username: req.params.username});
   if (!account) return res.json({message: 'Error find account'});
-  account = await AccountModel.findOneAndUpdate(
+  account = await AuthModel.findOneAndUpdate(
     {username: req.params.username},
     {
       username: req.body.username,
@@ -71,7 +72,7 @@ export async function update(req: Request, res: Response) {
 
 //delete
 export async function deleteAccount(req: Request, res: Response, next: NextFunction) {
-  let account: any = await AccountModel.findOne({username: req.params.username}).select(
+  let account: any = await AuthModel.findOne({username: req.params.username}).select(
     '+password'
   );
   if (!account) return res.json({
@@ -84,7 +85,7 @@ export async function deleteAccount(req: Request, res: Response, next: NextFunct
   )
     return res.json({message: 'password not ok'});
 
-  account = await AccountModel.deleteOne({username: req.params.username});
+  account = await AuthModel.deleteOne({username: req.params.username});
   res.status(200).json({
     message: 'delete OK!',
     data: account,
