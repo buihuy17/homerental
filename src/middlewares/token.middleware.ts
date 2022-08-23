@@ -26,7 +26,3 @@ export async function checkToken(req: any, res: any, next: any) {
     res.status(401).json({message: 'Token illegal'});
   }
 }
-
-// const refreshToken =jwt.sign(data, process.env.REFRESH_TOKEN_SECRET, {
-//   expiresIn: '30s'
-// })
