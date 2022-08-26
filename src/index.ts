@@ -5,10 +5,35 @@ import cors from 'cors';
 import {connect} from './config/db';
 import {mainRoute} from './routes';
 import {handleError} from "./middlewares/error.middleware";
+import passport from "passport";
+import {ExtractJwt, Strategy as JwtStrategy} from "passport-jwt";
+import {UserModel} from "./app/models/user.model";
 
 const app = express();
 const port = process.env.PORT || 2222;
 
+//passport
+app.use(passport.initialize());
+
+passport.use(new JwtStrategy(
+  {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: process.env.JWT_SECRET,
+  },
+  function (jwt_payload, done) {
+    console.log("Test")
+    UserModel.findOne({id: jwt_payload.sub}, function (err: any, user: any) {
+
+      if (err) {
+        return done(err, false);
+      }
+      if (user) {
+        return done(null, user);
+      } else {
+        return done(null, false);
+      }
+    });
+  }));
 
 //bodyParser
 app.use(bodyParser.urlencoded({extended: true}));

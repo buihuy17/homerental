@@ -1,4 +1,4 @@
-import {AuthModel} from '../models/auth.model';
+import {UserModel} from '../models/user.model';
 import bcrypt from 'bcryptjs';
 
 export async function createUser(username: string, email: string, password: string) {
@@ -6,7 +6,7 @@ export async function createUser(username: string, email: string, password: stri
   const salt = await bcrypt.genSalt(10);
   const hashPass = await bcrypt.hash(password, salt);
 
-  const newAccount = new AuthModel({
+  const newAccount = new UserModel({
     username,
     email,
     password: hashPass,

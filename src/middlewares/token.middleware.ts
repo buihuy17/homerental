@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import {AuthModel} from "../app/models/auth.model";
+import {UserModel} from "../app/models/user.model";
 
 export async function checkToken(req: any, res: any, next: any) {
   // send a request to the header to find the token and then verify.
@@ -12,7 +12,7 @@ export async function checkToken(req: any, res: any, next: any) {
   try {
     //check token
     const checkToken: any = jwt.verify(token, process.env.JWT_SECRET as string);
-    const userId: any = await AuthModel.findOne({_id: checkToken._id});
+    const userId: any = await UserModel.findOne({_id: checkToken._id});
     if (checkToken._id.toString() === userId._id.toString()) {
       req.user = userId;
       //save token to check
